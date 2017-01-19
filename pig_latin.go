@@ -1,45 +1,31 @@
-package piglatin
+package igpay
 
 import (
-	"fmt"
+	"log"
+	"regexp"
 	"strings"
 )
 
-var vowels = []string{"a", "e", "i", "o", "u"}
+var (
+	vowels = regexp.MustCompile("^[aeiou]|^[yx][^aeiou]")
+	cons   = regexp.MustCompile(".?(ch|qu|th)[^aeiou]?|.")
+)
 
-// CompareString compares with the input value string and collection strings
-func CompareString(value string, collection []string) bool {
-	for _, r := range collection {
-		if r == value {
-			return true
-		}
-	}
-	return false
-}
-
-// PigLatin translates english words into the pig-latin format
+// PigLatin translates a string into Pig Latin
 func PigLatin(text string) string {
 	words := strings.Split(text, " ")
-	var (
-		pLatinWord, consField, temp string
-	)
+	pigLatin := []string{}
 	for _, word := range words {
-		textField := word
-		if CompareString(string(textField[0]), vowels) {
-			pLatinWord = text + "way"
-		} else {
-			consField = ""
-			for _, letter := range textField {
-				if !CompareString(string(letter), vowels) {
-					consField = consField + string(letter)
-				} else {
-					break
-				}
-			}
-			suffix := textField[len(consField):]
-			temp = fmt.Sprintf("%s%say", suffix, consField)
-		}
-		pLatinWord = pLatinWord + temp + " "
+		pigLatin = append(pigLatin, pigLatinWord(word))
+		log.Println(pigLatin)
 	}
-	return pLatinWord
+	return strings.Join(pigLatin, " ")
+}
+
+func pigLatinWord(word string) string {
+	if vowels.MatchString(word) {
+		return word + "ay"
+	}
+	wordCount := cons.FindStringIndex(word)
+	return word[wordCount[1]:] + word[wordCount[0]:wordCount[1]] + "ay"
 }

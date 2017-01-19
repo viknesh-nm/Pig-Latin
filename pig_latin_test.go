@@ -1,19 +1,29 @@
-package piglatin
+package igpay
 
-import (
-	"fmt"
-	"testing"
-)
+import "testing"
 
-// TestPigLatin test the functionality of PigLatin
+var tests = []struct{ pl, in string }{
+	{"appleay", "apple"},
+	{"earay", "ear"},
+	{"igpay", "pig"},
+	{"oalakay", "koala"},
+	{"airchay", "chair"},
+	{"eenquay", "queen"},
+	{"aresquay", "square"},
+	{"erapythay", "therapy"},
+	{"ushthray", "thrush"},
+	{"oolschay", "school"},
+	{"ickquay astfay unray", "quick fast run"},
+	{"ellowyay", "yellow"},
+	{"yttriaay", "yttria"},
+	{"enonxay", "xenon"},
+	{"xrayay", "xray"},
+}
+
 func TestPigLatin(t *testing.T) {
-	var (
-		english = []string{"test piglatin", "egg", "phone"}
-		pLatin  string
-	)
-	fmt.Println("English: Pig_Latin:")
-	for _, value := range english {
-		pLatin = PigLatin(value)
-		fmt.Println(value, "\t", pLatin)
+	for _, test := range tests {
+		if pl := PigLatin(test.in); pl != test.pl {
+			t.Fatalf("PigLatin(%q) = %q, want %q.", test.in, pl, test.pl)
+		}
 	}
 }

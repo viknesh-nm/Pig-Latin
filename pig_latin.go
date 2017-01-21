@@ -16,14 +16,12 @@ func CompareString(value string, collection []string) bool {
 func PigLatin(text string) string {
 	words := strings.Split(text, " ")
 	var (
-		pLatinWord string
-		consField  string
-		temp       string
+		pLatinWord, consField, temp string
 	)
 	for _, word := range words {
 		consField = ""
 		if CompareString(string(word[0]), []string{"a", "e", "i", "o", "u", "y", "x"}) {
-			if string(word[1]) == "e" {
+			if (string(word[0]) == "y" || string(word[0]) == "x") && string(word[1]) == "e" {
 				consField = consField + string(word[0])
 				suffix := word[len(consField):]
 				pLatinWord = suffix + consField + "ay"
